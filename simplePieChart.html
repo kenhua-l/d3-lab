@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Pie Chart</title>
+  <link rel="stylesheet" href="vendor/normalize.css">
+  <style>
+    #chart {
+    height: 360px;
+    position: relative;
+    width: 360px;
+    }
+    .tooltip {
+      background: #eee;
+      box-shadow: 0 0 5px #999999;
+      color: #333;
+      display: none;
+      font-size: 12px;
+      left: 130px;
+      padding: 10px;
+      position: absolute;
+      text-align: center;
+      top: 95px;
+      width: 80px;
+      z-index: 10;
+      }
+    .legend {
+      font-size: 12px;
+    }
+    rect {
+      cursor: pointer;
+      stroke-width: 2;
+    }
+    rect.disabled {
+      fill: transparent !important;
+    }
+    h1 {
+      font-size: 14px;
+      text-align: center;
+    }
+    </style>
+</head>
+<body>
+  <div style="margin:50px; display:flex; flex-direction: row; justify-content:space-evenly">
+    <a href="index.html">Home</a>
+    <a href="simplePieChart.html">Simple Pie Chart</a>
+    <a href="simpleBarChart.html">Simple Bar Chart</a>
+    <a href="simpleLineChart.html">Simple Line Chart</a>
+  </div>
+  <div style="margin:50px; display:flex; flex-direction: column; align-content:center">
+    <h3 style="text-align:center">Pie Chart of Counts on Weekdays</h3>
+    <div id="chart" style="margin:auto;display:block;"></div>
+  </div>
+
+  <script src="vendor/d3.v4.min.js"></script>
+  <script src="js/d3Pie.js"></script>
+</body>
+</html>

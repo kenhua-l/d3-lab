@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Bar Chart</title>
+  <link rel="stylesheet" href="vendor/normalize.css">
+  <style>
+  .y-label {
+    fill: #000;
+    font-size: 10;
+    font-weight: bold;
+    text-anchor: start;
+  }
+  .line {
+    fill: none;
+    stroke: lightblue;
+    stroke-width: 3px;
+  }
+  .points {
+    fill: steelblue;
+    stroke: lightblue;
+  }
+  </style>
+</head>
+<body>
+  <div style="margin:50px; display:flex; flex-direction: row; justify-content:space-evenly">
+    <a href="index.html">Home</a>
+    <a href="simplePieChart.html">Simple Pie Chart</a>
+    <a href="simpleBarChart.html">Simple Bar Chart</a>
+    <a href="simpleLineChart.html">Simple Line Chart</a>
+  </div>
+  <div style="margin:50px; display:flex; flex-direction: column; align-content:center">
+    <h3 style="text-align:center">Line Chart of Counts on Weekdays</h3>
+    <div id="chart" style="margin:auto;display:block;"></div>
+  </div>
+  <script src="vendor/d3.v4.min.js"></script>
+  <script src="js/d3line.js"></script>
+</body>
+</html>

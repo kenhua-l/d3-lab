@@ -1,0 +1,16 @@
+[
+  {"label": "Monday",
+    "count": 5},
+  {"label": "Tuesday",
+    "count": 8},
+  {"label": "Wednesday",
+    "count": 3},
+  {"label": "Thursday",
+    "count": 7},
+  {"label": "Friday",
+    "count": 8},
+  {"label": "Saturday",
+    "count": 4},
+  {"label": "Sunday",
+    "count": 5}
+]
