@@ -41,3 +41,15 @@ Files to refer:
 </br>simpleLineChart.html
 </br>d3line.js
 </br>weekdays.csv
+
+## 4. Simple Line chart
+
+Phone Subscription Line Chart shows a line chart with data from total-mobile-phone-subscriptions.csv
+
+To take note for referral (new things not covered):
+</br>using d3.scaleTime() and by extension, parsing time
+</br>adding grid to line graph
+
+Files to refer:
+</br>phoneLineChart.html
+</br>total-mobile-phone-subscriptions.csv (in mobile-phone folder)

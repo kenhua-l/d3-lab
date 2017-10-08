@@ -5,13 +5,31 @@
   <title>Line Chart</title>
   <link rel="stylesheet" href="vendor/normalize.css">
   <style>
+  .y-label {
+    fill: #000;
+    font-size: 10;
+    font-weight: bold;
+    text-anchor: start;
+  }
+  .line {
+    fill: none;
+    stroke: black;
+    stroke-width: 1.5px;
+    stroke-linejoin: round;
+    stroke-linecap:round;
+  }
+  .grid line{
+    fill: none;
+    stroke: #dfdfdf;
+    stroke-width: 1px;
+  }
   </style>
 </head>
 <body>
   <div style="margin:50px; display:flex; flex-direction: row; justify-content:space-evenly">
     <a href="/">Home</a>
-    <a href="phoneLineChart.html">Phone Line Chart</a>
     <a href="phoneGroupBarChart.html">Phone Bar Chart</a>
+    <a href="phoneLineChart.html">Phone Line Chart</a>
   </div>
   <div style="margin:50px; display:flex; flex-direction: column; align-content:center">
     <h3 style="text-align:center">Line Chart of Mobile Subscription</h3>
@@ -19,6 +37,74 @@
   </div>
   <script src="vendor/d3.v4.min.js"></script>
   <script>
+  //Define the dimensions of the bar diagram
+  var width = 900;
+  var height = 450;
+
+  //parser to handle time data
+  var parseTime = d3.timeParse("%Y-%m");
+  //create the bar graph svg
+  var svg = d3.select("#chart")
+  .append("svg")
+  .attr('width', width+60)
+  .attr('height', height+50)
+  .append("g")
+  .attr("transform", "translate(" + 40 + "," + 20 + ")");
+
+  //get data from csv
+  d3.csv("mobile-phone/total-mobile-phone-subscriptions.csv", function(d) {
+    //clean data
+    d.month = parseTime(d.month);
+    d.total = +d.total;
+    return d;
+  }, function(error, dataset) {
+    //callback function is the data read is successful
+    if (error) throw error;
+
+    //define the axises' scale types and values
+    var x = d3.scaleTime()
+    .domain(d3.extent(dataset, function(d) { return d.month; })) //returns min and max range
+    .rangeRound([0, width]);
+
+    var y = d3.scaleLinear()
+    .domain([0, 9000000]) //max is slightly more than 8M
+    .rangeRound([height, 0]);
+
+    //bind data to line
+    var line = d3.line()
+    .x(function(d) { return x(d.month); })
+    .y(function(d) { return y(d.total); })
+
+    //add grid line
+    svg.append("g")
+    .call(d3.axisLeft(y).ticks(10).tickSize(-width).tickFormat(""))
+    .attr("class", "grid");
+
+    //draw line
+    svg.append("path")
+    .datum(dataset)
+    .attr("class", "line")
+    .attr("d", line);
+
+    //draw x-axis
+    svg.append("g")
+    .attr("class", "axis x-axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+    //draw the y-axis
+    svg.append("g")
+    .attr("class", "axis")
+    .call(d3.axisLeft(y).ticks(null, "s"))
+    //write the y-axis label
+    .append("text")
+    .attr("x", 5)
+    .attr("y", -10)
+    .attr("dy", "0.32em") //dy is relative coordinates - while y is absolute
+    .attr("class", "y-label")
+    .text("Total");
+
+  });
   </script>
 </body>
 </html>
