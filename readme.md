@@ -47,8 +47,7 @@ Files to refer:
 Phone Subscription Line Chart shows a line chart with data from mobile-phone-subscriptions-by-subscription-type.csv
 
 To take note for referral (new things not covered):
-</br>using d3.scaleTime() and by extension, parsing time
-</br>adding grid to line graph
+</br>adding a 3rd dimension of data into graph (grouped bar)
 
 Files to refer:
 </br>phoneGroupBarChart.html
