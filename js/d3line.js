@@ -24,7 +24,7 @@ d3.csv("data/weekdays.csv", function(d) {
   .domain(dataset.map(function(d) { return d.label; }))
   .range([0, width])
   .padding(0.4)
-  .align(0); //align left
+  .align(0.5); //align left
 
   var y = d3.scaleLinear()
   .domain([0, d3.max(dataset, function(d) { return d.count;})])
