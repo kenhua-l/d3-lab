@@ -5,13 +5,23 @@
   <title>Group Bar Chart</title>
   <link rel="stylesheet" href="vendor/normalize.css">
   <style>
+  .y-label {
+    fill: #000;
+    font-weight: bold;
+    text-anchor: start;
+  }
+  .legend-font{
+    font-family: sans-serif;
+    font-size: 10px;
+    text-anchor: end;
+  }
   </style>
 </head>
 <body>
   <div style="margin:50px; display:flex; flex-direction: row; justify-content:space-evenly">
     <a href="/">Home</a>
-    <a href="phoneLineChart.html">Phone Line Chart</a>
     <a href="phoneGroupBarChart.html">Phone Bar Chart</a>
+    <a href="phoneLineChart.html">Phone Line Chart</a>
   </div>
   <div style="margin:50px; display:flex; flex-direction: column; align-content:center">
     <h3 style="text-align:center">Group Bar Chart of Mobile Subscription</h3>
@@ -19,6 +29,110 @@
   </div>
   <script src="vendor/d3.v4.min.js"></script>
   <script>
+  //Define the dimensions of the bar diagram
+  var width = 900;
+  var height = 450;
+
+  //create the bar graph svg
+  var svg = d3.select("#chart")
+  .append("svg")
+  .attr("width", width+60)
+  .attr("height", height+50)
+  .append("g")
+  .attr("transform", "translate(" + 40 + "," + 20 + ")");
+
+  //choose color for each label
+  var color = d3.scaleOrdinal(d3.schemeCategory20c);
+
+  //get data from csv
+  d3.csv("mobile-phone/mobile-phone-subscriptions-by-subscription-type.csv", function(d,rows,columns) {
+    //get data from each column and clean it
+    for (var i = 1, n = columns.length; i < n; ++i)
+      d[columns[i]] = +d[columns[i]];
+    return d;
+  }, function(error, dataset) {
+    //callback function is the data read is successful
+    if (error) throw error;
+
+    //define the keys first (the subscription types - or z-axis)
+    var keys = dataset.columns.slice(1);
+
+    //define the axes' scale types and values
+    var x = d3.scaleBand()                  //This axis is the year axis
+    .domain(dataset.map(function(d) { return d.year; }))
+    .rangeRound([0, width]);
+
+    var y = d3.scaleLinear()                //This axis is the total subscription axis
+    .domain([0, d3.max(dataset,function(d){ //this is a bit overwhelming - 2D matrix
+      return d3.max(keys, function(key){    //but it is just finding the max count
+        return d[key];                      //in the respective keys first
+      });                                   //then return the max of the max
+    })]).nice()                             //make the data nice
+    .rangeRound([height, 0]);
+
+    var z = d3.scaleBand()                  //This axis is the subscription types axis (keys)
+    .domain(keys)
+    .rangeRound([0, x.bandwidth()])         //the width of this axis is as wide as one years' width
+    .padding(0.05);
+
+    //draw the bars
+    svg.append("g")                         //The bars are grouped together by year first (x-axis)
+    .selectAll("g")                         //So, create a g to encompass the rect bars
+    .data(dataset)                          //basically iterate the rows
+    .enter()
+    .append("g")
+    .attr("transform", function(d) {
+      return "translate(" + x(d.year) + ",0)";
+    })
+    .selectAll("rect")                      //Now, we create the bars according to keys (z-axis)
+    .data(function(d) {                     //get the data from each column
+      return keys.map(function(key) {
+        return {key: key, value: d[key]};
+      });
+    })
+    .enter()
+    .append("rect")
+    //define position and dimension of rect bars and color them
+    .attr("x", function(d) { return z(d.key); })
+    .attr("y", function(d) { return y(d.value); })
+    .attr("width", z.bandwidth())
+    .attr("height", function(d) { return height - y(d.value); })
+    .attr("fill", function(d) { return color(d.key); });
+
+    //draw the x-axis
+    svg.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+    //draw the y-axis
+    svg.append("g")
+    .attr("class", "axis")
+    .call(d3.axisLeft(y).ticks(10));
+
+    //create legends - append the rect and text
+    var legend = svg.append("g")
+    .attr("class", "legend-font")
+    .selectAll("g")
+    .data(color.domain())
+    .enter().append("g")
+    .attr("transform", function(d, i) {
+      return "translate(0," + i * 20 + ")";
+    });
+
+    legend.append("rect")
+    .attr("x", width -19)
+    .attr("width", 19)
+    .attr("height", 19)
+    .attr("fill", color);
+
+    legend.append("text")
+    .attr("x", width - 24)
+    .attr("y", 9.5)
+    .attr("dy", "0.32em")
+    .text(function(d) {return d;});
+  });
+
   </script>
 </body>
 </html>
